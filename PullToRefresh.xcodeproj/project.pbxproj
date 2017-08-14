@@ -334,6 +334,7 @@
 				DBC80AA11F40415F006A7B63 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

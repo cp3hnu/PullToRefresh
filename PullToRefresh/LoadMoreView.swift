@@ -210,7 +210,7 @@ private extension LoadMoreView {
         guard let scrollView = scrollView else { return }
         
         let height = UIScreen.main.bounds.height
-        frame = CGRect(x: 0, y: contentHeight() + externalContentInset.bottom, width: scrollView.bounds.width, height: height)
+        frame = CGRect(x: 0, y: contentHeight(), width: scrollView.bounds.width, height: height)
         
         //print("resetFrame", contentHeight(), externalContentInset.bottom, frame)
         
