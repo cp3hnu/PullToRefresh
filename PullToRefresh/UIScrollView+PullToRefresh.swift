@@ -9,13 +9,14 @@
 import UIKit
 
 // MARK: - Vars
-private extension UIScrollView {
+extension UIScrollView {
     struct AssociatedKeys {
         static var pullToRefreshView = "pullToRefreshView"
         static var loadMoreView = "loadMoreView"
+        static var hasContent = "hasContent"
     }
     
-    var pullToRefreshView: PullToRefreshView? {
+    fileprivate var pullToRefreshView: PullToRefreshView? {
         get {
             return objc_getAssociatedObject(self, &AssociatedKeys.pullToRefreshView) as? PullToRefreshView
         }
@@ -25,13 +26,24 @@ private extension UIScrollView {
         }
     }
     
-    var loadMoreView: LoadMoreView? {
+    fileprivate var loadMoreView: LoadMoreView? {
         get {
             return objc_getAssociatedObject(self, &AssociatedKeys.loadMoreView) as? LoadMoreView
         }
         
         set {
             objc_setAssociatedObject(self, &AssociatedKeys.loadMoreView, newValue, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
+    }
+    
+    // 是否允许显示加载更多功能(场景：没有数据时，上拉不显示加载更多，本来是判断ScrollView的contentHeight > 1，但是发现当有headerView的时候，这种判断不成立，需要手动设置一下）
+    public var hasContent: Bool {
+        get {
+            return objc_getAssociatedObject(self, &AssociatedKeys.hasContent) as? Bool ?? false
+        }
+        
+        set {
+            objc_setAssociatedObject(self, &AssociatedKeys.hasContent, newValue, objc_AssociationPolicy.OBJC_ASSOCIATION_ASSIGN)
         }
     }
 }
@@ -92,16 +104,16 @@ extension UIScrollView {
     /**
      完成加载更多，并设置是否还有更多的数据可供加载
      
-     - parameter completion: true：已经没有更多的数据，false：还有更多的数据
+     - parameter noMoreData: true：已经没有更多的数据，false：还有更多的数据
      */
-    public func completeLoadingMore(_ completion: Bool) {
-        loadMoreView?.completeLoadingMore(completion)
+    public func completeLoadingMore(_ noMoreData: Bool) {
+        loadMoreView?.completeLoadingMore(noMoreData)
     }
     
     /**
      只是完成单次的加载更多，优先调用*completeLoadingMore*
      */
-    public func endLoadingMore() {
+    func endLoadingMore() {
         loadMoreView?.endLoadingMore()
     }
 }

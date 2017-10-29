@@ -139,8 +139,8 @@ private extension LoadMoreView {
         guard let scrollView = scrollView else { return }
         
         let actionOffset = contentHeight() - scrollView.bounds.height + externalContentInset.bottom
-        let hasContent = scrollView.contentSize.height > 1
-        if  hasContent && contentOffset.y > actionOffset {
+        
+        if scrollView.hasContent && contentOffset.y > actionOffset {
             startLoadingMore()
         }
     }
@@ -215,7 +215,7 @@ private extension LoadMoreView {
         //print("resetFrame", contentHeight(), externalContentInset.bottom, frame)
         
         //完全没有数据或者没有更多的数据，且contentSize没有超过frame，隐藏load more
-        if scrollView.contentSize.height < 1 || status == .completion && !contentSizePassFrame() {
+        if !scrollView.hasContent || status == .completion && !contentSizePassFrame() {
             isHidden = true
         } else {
             isHidden = false

@@ -17,27 +17,31 @@ extension UITableView {
      - parameter pageNO:    分页
      - parameter dataCount: 请求到数据的数量
      - parameter pageSize:  分页大小
+     - parameter hasContent:  tableView有没有内容，没有内容禁止加载更多
      */
-    public func requestSuccess(pageNO: Int?, dataCount: Int?, pageSize: Int) {
+    public func requestSuccess(pageNO: Int, dataCount: Int, pageSize: Int, hasContent: Bool) {
         reloadData()
-        
         if pageNO == 1 {
             endRefreshing()
         }
         
-        completeLoadingMore((dataCount ?? 0) < pageSize)
+        self.hasContent = hasContent
+        completeLoadingMore(dataCount < pageSize)
     }
     
     /**
      接口请求失败
      
      - parameter pageNO: 分页
+     - parameter hasContent:  tableView有没有内容，没有内容禁止加载更多
      */
-    public func requestError(pageNO: Int?) {
+    public func requestError(pageNO: Int, hasContent: Bool) {
         if pageNO == 1 {
             endRefreshing()
         } else {
             completeLoadingMore(false)
         }
+        
+        self.hasContent = hasContent
     }
 }

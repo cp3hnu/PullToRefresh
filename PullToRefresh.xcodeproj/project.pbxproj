@@ -69,9 +69,9 @@
 				DBC80AA51F404186006A7B63 /* LoadMoreView.swift */,
 				DBC80AA61F404186006A7B63 /* PullToRefreshView.swift */,
 				DBC80AA71F404186006A7B63 /* UIScrollView+PullToRefresh.swift */,
-				DBC80AAE1F404AB1006A7B63 /* UITableView+Ext.swift */,
 				DBC80AB21F404CBC006A7B63 /* RefreshAnimationView.swift */,
 				DBC80AB01F404C94006A7B63 /* LoadMoreAnimationView.swift */,
+				DBC80AAE1F404AB1006A7B63 /* UITableView+Ext.swift */,
 			);
 			path = PullToRefresh;
 			sourceTree = "<group>";
