@@ -19,13 +19,13 @@ extension UITableView {
      - parameter pageSize:  分页大小
      - parameter hasContent:  tableView有没有内容，没有内容禁止加载更多
      */
-    public func requestSuccess(pageNO: Int, dataCount: Int, pageSize: Int, hasContent: Bool) {
+    public func requestSuccess(pageNO: Int, dataCount: Int, pageSize: Int, hasContent: Bool?) {
         reloadData()
         if pageNO == 1 {
             endRefreshing()
         }
         
-        self.hasContent = hasContent
+        self.hasContent = hasContent ?? false
         completeLoadingMore(dataCount < pageSize)
     }
     
@@ -35,13 +35,13 @@ extension UITableView {
      - parameter pageNO: 分页
      - parameter hasContent:  tableView有没有内容，没有内容禁止加载更多
      */
-    public func requestError(pageNO: Int, hasContent: Bool) {
+    public func requestError(pageNO: Int, hasContent: Bool?) {
         if pageNO == 1 {
             endRefreshing()
         } else {
             completeLoadingMore(false)
         }
         
-        self.hasContent = hasContent
+        self.hasContent = hasContent ?? false
     }
 }
