@@ -14,14 +14,14 @@ extension UITableView {
     /**
      接口请求成功，在这里调用了reloadData()，controller里不需要再调用了reloadData()
      
-     - parameter pageNO:    分页
-     - parameter dataCount: 请求到数据的数量
-     - parameter pageSize:  分页大小
+     - parameter isFirstPage: 是否是第一页
+     - parameter dataCount:   请求到数据的数量
+     - parameter pageSize:    分页大小
      - parameter hasContent:  tableView有没有内容，没有内容禁止加载更多
      */
-    public func requestSuccess(pageNO: Int, dataCount: Int, pageSize: Int, hasContent: Bool) {
+    public func requestSuccess(isFirstPage: Bool, dataCount: Int, pageSize: Int, hasContent: Bool) {
         reloadData()
-        if pageNO == 1 {
+        if isFirstPage {
             endRefreshing()
         }
         
@@ -32,11 +32,11 @@ extension UITableView {
     /**
      接口请求失败
      
-     - parameter pageNO: 分页
+     - parameter isFirstPage: 是否是第一页
      - parameter hasContent:  tableView有没有内容，没有内容禁止加载更多
      */
-    public func requestError(pageNO: Int, hasContent: Bool) {
-        if pageNO == 1 {
+    public func requestError(isFirstPage: Bool, hasContent: Bool) {
+        if isFirstPage {
             endRefreshing()
         } else {
             completeLoadingMore(false)
