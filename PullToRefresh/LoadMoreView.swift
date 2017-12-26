@@ -14,7 +14,7 @@ internal enum LoadMoreStatus: Int {
     case completion
 }
 
-public typealias LoadMoreAction = (Void) -> (Void)
+public typealias LoadMoreAction = () -> Void
 
 public class LoadMoreView: UIView {
 

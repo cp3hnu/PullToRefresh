@@ -14,7 +14,7 @@ internal enum RefreshStatus: Int {
     case pulling
 }
 
-public typealias RefreshAction = (Void) -> (Void)
+public typealias RefreshAction = () -> Void
 
 public class PullToRefreshView: UIView {
 
