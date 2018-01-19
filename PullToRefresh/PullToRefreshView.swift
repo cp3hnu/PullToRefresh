@@ -25,10 +25,10 @@ public class PullToRefreshView: UIView {
     weak var scrollView: UIScrollView?
     var externalContentInset: UIEdgeInsets
     let actionHandler: RefreshAction
-    let animationView: RefreshAnimationView
+    let animationView: RefreshAnimatableView
     var updatingContentInset = false
     
-    public init(scrollView: UIScrollView, animationView: RefreshAnimationView, actionHandler: @escaping RefreshAction) {
+    public init(scrollView: UIScrollView, animationView: RefreshAnimatableView, actionHandler: @escaping RefreshAction) {
         
         self.scrollView = scrollView
         self.animationView = animationView

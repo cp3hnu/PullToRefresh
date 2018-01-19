@@ -15,16 +15,11 @@ public protocol RefreshAnimatable {
     func pullProgress(_ progress: CGFloat)
 }
 
-open class RefreshAnimationView: UIView, RefreshAnimatable {
-    open func startAnimating() {
-        //Do nothing
-    }
-    
-    open func stopAnimating() {
-        //Do nothing
-    }
-    
-    open func pullProgress(_ progress: CGFloat) {
-        //Do nothing
-    }
+public protocol LoadMoreAnimatable {
+    func startAnimating()
+    func stopAnimating()
+    func completeLoading(_ completion: Bool)
 }
+
+public typealias RefreshAnimatableView = UIView & RefreshAnimatable
+public typealias LoadMoreAnimatableView = UIView & LoadMoreAnimatable

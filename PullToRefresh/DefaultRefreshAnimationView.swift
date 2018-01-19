@@ -21,7 +21,7 @@ public extension CGFloat {
     }
 }
 
-public class DefaultRefreshAnimationView: RefreshAnimationView {
+public class DefaultRefreshAnimationView: UIView, RefreshAnimatable {
 
     fileprivate let shapeLayer = CAShapeLayer()
     fileprivate lazy var identityTransform: CATransform3D = {
@@ -65,7 +65,7 @@ public class DefaultRefreshAnimationView: RefreshAnimationView {
     }
     
     // MARK: - Subclass
-    override public func pullProgress(_ progress: CGFloat) {
+    public func pullProgress(_ progress: CGFloat) {
         shapeLayer.strokeEnd = min(0.8 * progress, 0.9)
         
         if progress > 1.0 {
@@ -76,9 +76,7 @@ public class DefaultRefreshAnimationView: RefreshAnimationView {
         }
     }
     
-    override public func startAnimating() {
-        super.startAnimating()
-        
+    public func startAnimating() {
         if shapeLayer.animation(forKey: kRotationAnimation) != nil { return }
         
         shapeLayer.strokeEnd = 0.9
@@ -92,7 +90,7 @@ public class DefaultRefreshAnimationView: RefreshAnimationView {
         shapeLayer.add(rotationAnimation, forKey: kRotationAnimation)
     }
     
-    override public func stopAnimating() {
+    public func stopAnimating() {
         shapeLayer.removeAnimation(forKey: kRotationAnimation)
     }
 }

@@ -14,8 +14,7 @@
 		DBC80AAC1F404186006A7B63 /* PullToRefreshView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBC80AA61F404186006A7B63 /* PullToRefreshView.swift */; };
 		DBC80AAD1F404186006A7B63 /* UIScrollView+PullToRefresh.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBC80AA71F404186006A7B63 /* UIScrollView+PullToRefresh.swift */; };
 		DBC80AAF1F404AB1006A7B63 /* UITableView+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBC80AAE1F404AB1006A7B63 /* UITableView+Ext.swift */; };
-		DBC80AB11F404C94006A7B63 /* LoadMoreAnimationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBC80AB01F404C94006A7B63 /* LoadMoreAnimationView.swift */; };
-		DBC80AB31F404CBC006A7B63 /* RefreshAnimationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBC80AB21F404CBC006A7B63 /* RefreshAnimationView.swift */; };
+		DBC80AB31F404CBC006A7B63 /* Animatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBC80AB21F404CBC006A7B63 /* Animatable.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,8 +27,7 @@
 		DBC80AA61F404186006A7B63 /* PullToRefreshView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PullToRefreshView.swift; sourceTree = "<group>"; };
 		DBC80AA71F404186006A7B63 /* UIScrollView+PullToRefresh.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIScrollView+PullToRefresh.swift"; sourceTree = "<group>"; };
 		DBC80AAE1F404AB1006A7B63 /* UITableView+Ext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UITableView+Ext.swift"; sourceTree = "<group>"; };
-		DBC80AB01F404C94006A7B63 /* LoadMoreAnimationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadMoreAnimationView.swift; sourceTree = "<group>"; };
-		DBC80AB21F404CBC006A7B63 /* RefreshAnimationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RefreshAnimationView.swift; sourceTree = "<group>"; };
+		DBC80AB21F404CBC006A7B63 /* Animatable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Animatable.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,8 +67,7 @@
 				DBC80AA51F404186006A7B63 /* LoadMoreView.swift */,
 				DBC80AA61F404186006A7B63 /* PullToRefreshView.swift */,
 				DBC80AA71F404186006A7B63 /* UIScrollView+PullToRefresh.swift */,
-				DBC80AB21F404CBC006A7B63 /* RefreshAnimationView.swift */,
-				DBC80AB01F404C94006A7B63 /* LoadMoreAnimationView.swift */,
+				DBC80AB21F404CBC006A7B63 /* Animatable.swift */,
 				DBC80AAE1F404AB1006A7B63 /* UITableView+Ext.swift */,
 			);
 			path = PullToRefresh;
@@ -158,13 +155,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				DBC80AAD1F404186006A7B63 /* UIScrollView+PullToRefresh.swift in Sources */,
-				DBC80AB11F404C94006A7B63 /* LoadMoreAnimationView.swift in Sources */,
 				DBC80AAA1F404186006A7B63 /* DefaultRefreshAnimationView.swift in Sources */,
 				DBC80AA91F404186006A7B63 /* DefaultLoadMoreAnimation.swift in Sources */,
 				DBC80AAF1F404AB1006A7B63 /* UITableView+Ext.swift in Sources */,
 				DBC80AAB1F404186006A7B63 /* LoadMoreView.swift in Sources */,
 				DBC80AAC1F404186006A7B63 /* PullToRefreshView.swift in Sources */,
-				DBC80AB31F404CBC006A7B63 /* RefreshAnimationView.swift in Sources */,
+				DBC80AB31F404CBC006A7B63 /* Animatable.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

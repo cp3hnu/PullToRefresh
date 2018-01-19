@@ -24,13 +24,13 @@ public class LoadMoreView: UIView {
     weak var scrollView: UIScrollView?
     var externalContentInset: UIEdgeInsets
     let actionHandler: LoadMoreAction
-    let animationView: LoadMoreAnimationView
+    let animationView: LoadMoreAnimatableView
     //内部更新contentInset
     var updatingContentInset = false
     //内部添加的contentInset.bottom
     var createdInsetBottom: CGFloat = 0
     
-    public init(scrollView: UIScrollView, animationView: LoadMoreAnimationView, actionHandler: @escaping LoadMoreAction) {
+    public init(scrollView: UIScrollView, animationView: LoadMoreAnimatableView, actionHandler: @escaping LoadMoreAction) {
         self.scrollView = scrollView
         self.animationView = animationView
         self.actionHandler = actionHandler

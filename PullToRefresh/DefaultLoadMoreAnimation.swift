@@ -8,7 +8,7 @@
 
 import UIKit
 
-public class DefaultLoadMoreAnimationView: LoadMoreAnimationView {
+public class DefaultLoadMoreAnimationView: UIView, LoadMoreAnimatable {
 
     fileprivate let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .gray)
     fileprivate let label = UILabel()
@@ -40,20 +40,20 @@ public class DefaultLoadMoreAnimationView: LoadMoreAnimationView {
         }
     }
     
-    public override func startAnimating() {
+    public func startAnimating() {
         isAnimating = true
         activityIndicator.isHidden = false
         activityIndicator.startAnimating()
         label.text = "努力加载中..."
     }
     
-    public override func stopAnimating() {
+    public func stopAnimating() {
         isAnimating = false
         activityIndicator.stopAnimating()
         label.text = "加载更多"
     }
     
-    public override func completeLoading(_ completion: Bool) {
+    public func completeLoading(_ completion: Bool) {
         isAnimating = false
         activityIndicator.stopAnimating()
         

@@ -69,7 +69,7 @@ extension UIScrollView {
      - parameter animationView: 动画视图
      - parameter actionHandler: 回调方法
      */
-    public func addPullToRefresh(_ animationView: RefreshAnimationView = DefaultRefreshAnimationView(), actionHandler: @escaping RefreshAction) {
+    public func addPullToRefresh(_ animationView: RefreshAnimatableView = DefaultRefreshAnimationView(), actionHandler: @escaping RefreshAction) {
         pullToRefreshView = PullToRefreshView(scrollView: self, animationView: animationView, actionHandler: actionHandler)
         addSubview(pullToRefreshView!)
         sendSubview(toBack: pullToRefreshView!)
@@ -96,7 +96,7 @@ extension UIScrollView {
      - parameter animationView: 动画视图
      - parameter actionHandler: 回调方法
      */
-    public func addLoadMore(_ animationView: LoadMoreAnimationView = DefaultLoadMoreAnimationView(), actionHandler: @escaping LoadMoreAction) {
+    public func addLoadMore(_ animationView: LoadMoreAnimatableView = DefaultLoadMoreAnimationView(), actionHandler: @escaping LoadMoreAction) {
         loadMoreView = LoadMoreView(scrollView: self, animationView: animationView, actionHandler: actionHandler)
         addSubview(loadMoreView!)
     }
