@@ -109,12 +109,5 @@ extension UIScrollView {
     public func completeLoadingMore(_ noMoreData: Bool) {
         loadMoreView?.completeLoadingMore(noMoreData)
     }
-    
-    /**
-     只是完成单次的加载更多，优先调用*completeLoadingMore*
-     */
-    func endLoadingMore() {
-        loadMoreView?.endLoadingMore()
-    }
 }
 

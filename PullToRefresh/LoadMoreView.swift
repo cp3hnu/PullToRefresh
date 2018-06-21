@@ -67,10 +67,6 @@ public class LoadMoreView: UIView {
 
 // MARK: - API
 public extension LoadMoreView {
-    func endLoadingMore() {
-        stopLoadingMore()
-    }
-    
     func completeLoadingMore(_ noMoreData: Bool) {
         finishLoadingMore(noMoreData)
     }
@@ -93,8 +89,6 @@ extension LoadMoreView {
     }
     
     public override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-       
-        //print("keypath", keyPath, "change", change)
         
         if keyPath == "contentOffset" {
             if let offset = (change?[NSKeyValueChangeKey.newKey] as AnyObject).cgPointValue {
@@ -182,13 +176,11 @@ private extension LoadMoreView {
             animationView.completeLoading(true)
             
             var contentInset = externalContentInset
-            if contentSizePassFrame() {
+            let isShowing = contentSizePassFrame()
+            self.isHidden = !isShowing
+            if isShowing {
                 contentInset.bottom += LoadMoreView.pullHeight
-                isHidden = false
-            } else {
-                isHidden = true
             }
-            
             setScrollViewContentInset(contentInset)
         } else {
             isHidden = false
@@ -212,13 +204,17 @@ private extension LoadMoreView {
         let height = UIScreen.main.bounds.height
         frame = CGRect(x: 0, y: contentHeight(), width: scrollView.bounds.width, height: height)
         
-        //print("resetFrame", contentHeight(), externalContentInset.bottom, frame)
-        
-        //完全没有数据或者没有更多的数据，且contentSize没有超过frame，隐藏load more
+        // print("resetFrame", contentHeight(), externalContentInset.bottom, frame)
+
+        // 完全没有数据或者没有更多的数据，且contentSize没有超过frame，隐藏load more
         if !scrollView.hasContent || status == .completion && !contentSizePassFrame() {
             isHidden = true
+            setScrollViewContentInset(externalContentInset)
         } else {
             isHidden = false
+            var contentInset = externalContentInset
+            contentInset.bottom += LoadMoreView.pullHeight
+            setScrollViewContentInset(contentInset)
         }
     }
     
