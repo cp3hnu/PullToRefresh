@@ -18,15 +18,23 @@ public typealias RefreshAction = () -> Void
 
 public class PullToRefreshView: UIView {
 
-    static var pullHeight: CGFloat = 60
-    static var loadingViewSize: CGFloat = 30
+    private static var pullHeight: CGFloat = 60
+    private static var loadingViewSize: CGFloat = 30
     
-    var status: RefreshStatus = .stopped
-    weak var scrollView: UIScrollView?
-    var externalContentInset: UIEdgeInsets
-    let actionHandler: RefreshAction
-    let animationView: RefreshAnimatableView
-    var updatingContentInset = false
+    internal var status: RefreshStatus = .stopped
+    private weak var scrollView: UIScrollView?
+    private var externalContentInset: UIEdgeInsets
+    private let actionHandler: RefreshAction
+    private let animationView: RefreshAnimatableView
+    private var updatingContentInset = false
+    private var externalTop: CGFloat {
+        if #available(iOS 11, *) {
+            guard let scrollView = self.scrollView else { return 0 }
+            return scrollView.adjustedContentInset.top - scrollView.contentInset.top
+        }
+        
+        return 0
+    }
     
     public init(scrollView: UIScrollView, animationView: RefreshAnimatableView, actionHandler: @escaping RefreshAction) {
         
@@ -83,14 +91,14 @@ public extension PullToRefreshView {
 
 // MARK: - Observer
 extension PullToRefreshView {
-    fileprivate func addScrollViewObservers(_ scrollView: UIScrollView) {
+    private func addScrollViewObservers(_ scrollView: UIScrollView) {
         scrollView.addObserver(self, forKeyPath: "contentOffset", options: .new, context: nil)
         scrollView.addObserver(self, forKeyPath: "contentSize", options: .new, context: nil)
         scrollView.addObserver(self, forKeyPath: "frame", options: .new, context: nil)
         scrollView.addObserver(self, forKeyPath: "contentInset", options: .new, context: nil)
     }
     
-    fileprivate func removeScrollViewObservers(_ scrollView: UIScrollView) {
+    private func removeScrollViewObservers(_ scrollView: UIScrollView) {
         scrollView.removeObserver(self, forKeyPath: "contentOffset")
         scrollView.removeObserver(self, forKeyPath: "contentSize")
         scrollView.removeObserver(self, forKeyPath: "frame")
@@ -105,7 +113,6 @@ extension PullToRefreshView {
             }
             layoutSubviews()
             resetFrame()
-            
         } else if keyPath == "contentSize" {
             layoutSubviews()
             resetFrame()
@@ -130,7 +137,7 @@ private extension PullToRefreshView {
     func scrollViewDidScroll(_ contentOffset: CGPoint) {
         guard let scrollView = scrollView else { return }
         
-        let actionOffset: CGFloat = -contentOffset.y - externalContentInset.top
+        let actionOffset: CGFloat = -contentOffset.y - externalContentInset.top - externalTop
         
         if status == .pulling && !scrollView.isDragging {
             if actionOffset >= PullToRefreshView.pullHeight {
@@ -190,7 +197,7 @@ private extension PullToRefreshView {
     
     func currentHeight() -> CGFloat {
         guard let scrollView = scrollView else { return 0.0 }
-        return max(-externalContentInset.top - scrollView.contentOffset.y, 0)
+        return max(-externalContentInset.top - scrollView.contentOffset.y - externalTop, 0)
     }
     
     func resetFrame() {

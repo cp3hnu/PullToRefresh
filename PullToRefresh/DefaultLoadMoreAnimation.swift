@@ -8,11 +8,11 @@
 
 import UIKit
 
-public class DefaultLoadMoreAnimationView: UIView, LoadMoreAnimatable {
+public class DefaultLoadMoreAnimationView: UIView {
 
-    fileprivate let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .gray)
-    fileprivate let label = UILabel()
-    fileprivate(set) var isAnimating = false
+    private let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .gray)
+    private let label = UILabel()
+    private(set) var isAnimating = false
     
     public init() {
         super.init(frame: CGRect.zero)
@@ -39,7 +39,9 @@ public class DefaultLoadMoreAnimationView: UIView, LoadMoreAnimatable {
             startAnimating()
         }
     }
-    
+}
+
+extension DefaultLoadMoreAnimationView: LoadMoreAnimatable {
     public func startAnimating() {
         isAnimating = true
         activityIndicator.isHidden = false

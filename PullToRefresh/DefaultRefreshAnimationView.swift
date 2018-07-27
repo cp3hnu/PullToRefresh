@@ -21,10 +21,10 @@ public extension CGFloat {
     }
 }
 
-public class DefaultRefreshAnimationView: UIView, RefreshAnimatable {
+public class DefaultRefreshAnimationView: UIView {
 
-    fileprivate let shapeLayer = CAShapeLayer()
-    fileprivate lazy var identityTransform: CATransform3D = {
+    private let shapeLayer = CAShapeLayer()
+    private lazy var identityTransform: CATransform3D = {
         var transform = CATransform3DIdentity
         transform.m34 = CGFloat(1.0 / -500.0)
         transform = CATransform3DRotate(transform, CGFloat(-90.0).toRadians(), 0.0, 0.0, 1.0)
@@ -50,7 +50,6 @@ public class DefaultRefreshAnimationView: UIView, RefreshAnimatable {
     
     override public func tintColorDidChange() {
         super.tintColorDidChange()
-        
         shapeLayer.strokeColor = tintColor.cgColor
     }
     
@@ -63,8 +62,9 @@ public class DefaultRefreshAnimationView: UIView, RefreshAnimatable {
         let inset = shapeLayer.lineWidth / 2.0
         shapeLayer.path = UIBezierPath(ovalIn: shapeLayer.bounds.insetBy(dx: inset, dy: inset)).cgPath
     }
-    
-    // MARK: - Subclass
+}
+
+extension DefaultRefreshAnimationView: RefreshAnimatable {
     public func pullProgress(_ progress: CGFloat) {
         shapeLayer.strokeEnd = min(0.8 * progress, 0.9)
         
@@ -94,7 +94,6 @@ public class DefaultRefreshAnimationView: UIView, RefreshAnimatable {
         shapeLayer.removeAnimation(forKey: kRotationAnimation)
     }
 }
-
 
 // MARK: - Help
 private extension DefaultRefreshAnimationView {

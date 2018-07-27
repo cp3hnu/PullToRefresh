@@ -18,17 +18,33 @@ public typealias LoadMoreAction = () -> Void
 
 public class LoadMoreView: UIView {
 
-    static var pullHeight: CGFloat = 60
+    private static var pullHeight: CGFloat = 60
 
-    var status: LoadMoreStatus = .stopped
-    weak var scrollView: UIScrollView?
-    var externalContentInset: UIEdgeInsets
-    let actionHandler: LoadMoreAction
-    let animationView: LoadMoreAnimatableView
-    //内部更新contentInset
-    var updatingContentInset = false
-    //内部添加的contentInset.bottom
-    var createdInsetBottom: CGFloat = 0
+    internal var status: LoadMoreStatus = .stopped
+    private weak var scrollView: UIScrollView?
+    private var externalContentInset: UIEdgeInsets
+    private let actionHandler: LoadMoreAction
+    private let animationView: LoadMoreAnimatableView
+    // 内部正在更新contentInset
+    private var updatingContentInset = false
+    // 内部添加的contentInset.bottom
+    private var createdInsetBottom: CGFloat = 0
+    private var externalTop: CGFloat {
+        if #available(iOS 11, *) {
+            guard let scrollView = self.scrollView else { return 0 }
+            return scrollView.adjustedContentInset.top - scrollView.contentInset.top
+        }
+        
+        return 0
+    }
+    private var externalBottom: CGFloat {
+        if #available(iOS 11, *) {
+            guard let scrollView = self.scrollView else { return 0 }
+            return scrollView.adjustedContentInset.bottom - scrollView.contentInset.bottom
+        }
+        
+        return 0
+    }
     
     public init(scrollView: UIScrollView, animationView: LoadMoreAnimatableView, actionHandler: @escaping LoadMoreAction) {
         self.scrollView = scrollView
@@ -39,7 +55,7 @@ public class LoadMoreView: UIView {
         super.init(frame: CGRect.zero)
     
         addSubview(self.animationView)
-        //backgroundColor = UIColor.redColor()
+        backgroundColor = UIColor.red
     }
     
     public required init?(coder aDecoder: NSCoder) {
@@ -74,14 +90,14 @@ public extension LoadMoreView {
 
 // MARK: - Observer
 extension LoadMoreView {
-    fileprivate func addScrollViewObservers(_ scrollView: UIScrollView) {
+    private func addScrollViewObservers(_ scrollView: UIScrollView) {
         scrollView.addObserver(self, forKeyPath: "contentOffset", options: .new, context: nil)
         scrollView.addObserver(self, forKeyPath: "contentSize", options: .new, context: nil)
         scrollView.addObserver(self, forKeyPath: "frame", options: .new, context: nil)
         scrollView.addObserver(self, forKeyPath: "contentInset", options: .new, context: nil)
     }
     
-    fileprivate func removeScrollViewObservers(_ scrollView: UIScrollView) {
+    private func removeScrollViewObservers(_ scrollView: UIScrollView) {
         scrollView.removeObserver(self, forKeyPath: "contentOffset")
         scrollView.removeObserver(self, forKeyPath: "contentSize")
         scrollView.removeObserver(self, forKeyPath: "frame")
@@ -89,6 +105,8 @@ extension LoadMoreView {
     }
     
     public override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        
+        // print("keypath = ", keyPath, "change = ", change)
         
         if keyPath == "contentOffset" {
             if let offset = (change?[NSKeyValueChangeKey.newKey] as AnyObject).cgPointValue {
@@ -120,19 +138,15 @@ extension LoadMoreView {
 
 // MARK: - Help
 private extension LoadMoreView {
-    func contentHeight() -> CGFloat {
-        guard let scrollView = scrollView else {
-            return 0
-        }
-        
-        let remainingHeight = scrollView.bounds.height - externalContentInset.top - externalContentInset.bottom
-        return max(remainingHeight, scrollView.contentSize.height)
-    }
-    
     func scrollViewDidScroll(_ contentOffset: CGPoint) {
         guard let scrollView = scrollView else { return }
         
-        let actionOffset = contentHeight() - scrollView.bounds.height + externalContentInset.bottom
+        let actionOffset: CGFloat
+        if contentSizePassFrame() {
+            actionOffset = scrollView.contentSize.height - scrollView.bounds.height + externalContentInset.bottom + externalBottom
+        } else {
+            actionOffset = -externalContentInset.top - externalTop
+        }
         
         if scrollView.hasContent && contentOffset.y > actionOffset {
             startLoadingMore()
@@ -175,13 +189,18 @@ private extension LoadMoreView {
             status = .completion
             animationView.completeLoading(true)
             
-            var contentInset = externalContentInset
-            let isShowing = contentSizePassFrame()
-            self.isHidden = !isShowing
-            if isShowing {
-                contentInset.bottom += LoadMoreView.pullHeight
-            }
-            setScrollViewContentInset(contentInset)
+            // 解决scrollView.contentSize.height不能及时更新，使得contentSizePassFrame() = false，从而导致view不能正确显示的问题
+            DispatchQueue.main.async {
+                var contentInset = self.externalContentInset
+                if self.contentSizePassFrame() {
+                    contentInset.bottom += LoadMoreView.pullHeight
+                    self.isHidden = false
+                } else {
+                    self.isHidden = true
+                }
+                
+                self.setScrollViewContentInset(contentInset)
+           }
         } else {
             isHidden = false
             stopLoadingMore()
@@ -201,29 +220,27 @@ private extension LoadMoreView {
     func resetFrame() {
         guard let scrollView = scrollView else { return }
         
+        // 避免颜色不一致
         let height = UIScreen.main.bounds.height
         frame = CGRect(x: 0, y: contentHeight(), width: scrollView.bounds.width, height: height)
         
         // print("resetFrame", contentHeight(), externalContentInset.bottom, frame)
 
-        // 完全没有数据或者没有更多的数据，且contentSize没有超过frame，隐藏load more
+        // 完全没有数据/没有更多数据时且contentSize没有超过frame，则隐藏loadMore view
         if !scrollView.hasContent || status == .completion && !contentSizePassFrame() {
             isHidden = true
-            setScrollViewContentInset(externalContentInset)
         } else {
             isHidden = false
-            var contentInset = externalContentInset
-            contentInset.bottom += LoadMoreView.pullHeight
-            setScrollViewContentInset(contentInset)
         }
     }
     
+    // 当contentSize小于frame，要增加contentInset.bottom
     func bottomInset() -> CGFloat {
         guard let scrollView = scrollView else {
             return LoadMoreView.pullHeight
         }
         
-        let remainingHeight = scrollView.bounds.height - externalContentInset.top - externalContentInset.bottom
+        let remainingHeight = scrollView.bounds.height - externalContentInset.top - externalContentInset.bottom - externalTop - externalBottom
         return max(0, remainingHeight - scrollView.contentSize.height) + LoadMoreView.pullHeight
     }
     
@@ -232,7 +249,16 @@ private extension LoadMoreView {
             return false
         }
         
-        let remainingHeight = scrollView.bounds.height - externalContentInset.top - externalContentInset.bottom
+        let remainingHeight = scrollView.bounds.height - externalContentInset.top - externalContentInset.bottom - externalTop - externalBottom
         return scrollView.contentSize.height > remainingHeight
+    }
+    
+    func contentHeight() -> CGFloat {
+        guard let scrollView = scrollView else {
+            return 0
+        }
+        
+        let remainingHeight = scrollView.bounds.height - externalContentInset.top - externalContentInset.bottom - externalTop - externalBottom
+        return max(remainingHeight, scrollView.contentSize.height)
     }
 }

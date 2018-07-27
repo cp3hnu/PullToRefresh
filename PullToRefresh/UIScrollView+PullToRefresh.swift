@@ -10,13 +10,13 @@ import UIKit
 
 // MARK: - Vars
 extension UIScrollView {
-    struct AssociatedKeys {
+    private struct AssociatedKeys {
         static var pullToRefreshView = "pullToRefreshView"
         static var loadMoreView = "loadMoreView"
         static var hasContent = "hasContent"
     }
     
-    fileprivate var pullToRefreshView: PullToRefreshView? {
+    private var pullToRefreshView: PullToRefreshView? {
         get {
             return objc_getAssociatedObject(self, &AssociatedKeys.pullToRefreshView) as? PullToRefreshView
         }
@@ -26,7 +26,7 @@ extension UIScrollView {
         }
     }
     
-    fileprivate var loadMoreView: LoadMoreView? {
+    private var loadMoreView: LoadMoreView? {
         get {
             return objc_getAssociatedObject(self, &AssociatedKeys.loadMoreView) as? LoadMoreView
         }
