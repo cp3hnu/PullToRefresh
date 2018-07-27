@@ -55,7 +55,7 @@ public class LoadMoreView: UIView {
         super.init(frame: CGRect.zero)
     
         addSubview(self.animationView)
-        backgroundColor = UIColor.red
+        // backgroundColor = UIColor.red
     }
     
     public required init?(coder aDecoder: NSCoder) {
