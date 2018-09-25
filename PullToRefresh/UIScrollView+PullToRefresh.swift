@@ -72,7 +72,7 @@ extension UIScrollView {
     public func addPullToRefresh(_ animationView: RefreshAnimatableView = DefaultRefreshAnimationView(), actionHandler: @escaping RefreshAction) {
         pullToRefreshView = PullToRefreshView(scrollView: self, animationView: animationView, actionHandler: actionHandler)
         addSubview(pullToRefreshView!)
-        sendSubview(toBack: pullToRefreshView!)
+        sendSubviewToBack(pullToRefreshView!)
     }
     
     /**

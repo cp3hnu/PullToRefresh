@@ -86,7 +86,7 @@ extension DefaultRefreshAnimationView: RefreshAnimatable {
         rotationAnimation.duration = 1.0
         rotationAnimation.repeatCount = Float.infinity
         rotationAnimation.isRemovedOnCompletion = false
-        rotationAnimation.fillMode = kCAFillModeForwards
+        rotationAnimation.fillMode = CAMediaTimingFillMode.forwards
         shapeLayer.add(rotationAnimation, forKey: kRotationAnimation)
     }
     

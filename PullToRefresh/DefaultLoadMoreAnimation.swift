@@ -10,7 +10,7 @@ import UIKit
 
 public class DefaultLoadMoreAnimationView: UIView {
 
-    private let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .gray)
+    private let activityIndicator = UIActivityIndicatorView(style: .gray)
     private let label = UILabel()
     private(set) var isAnimating = false
     
@@ -27,7 +27,7 @@ public class DefaultLoadMoreAnimationView: UIView {
         addSubview(label)
         self.addConstraint(NSLayoutConstraint(item: label, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1.0, constant: 0))
         self.addConstraint(NSLayoutConstraint(item: label, attribute: .centerY, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1.0, constant: 0))
-        self.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "[activityIndicator]-10-[label]", options: NSLayoutFormatOptions.alignAllCenterY, metrics: nil, views: ["activityIndicator": activityIndicator, "label": label]))
+        self.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "[activityIndicator]-10-[label]", options: NSLayoutConstraint.FormatOptions.alignAllCenterY, metrics: nil, views: ["activityIndicator": activityIndicator, "label": label]))
     }
     
     public required init?(coder aDecoder: NSCoder) {
